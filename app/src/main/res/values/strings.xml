@@ -5,4 +5,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="app_logo">Search on FB Logo</string>
+    <string name="enter_keyword">Enter a keyword:</string>
+    <string name="results">Results</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_results">ResultsActivity</string>
 </resources>
