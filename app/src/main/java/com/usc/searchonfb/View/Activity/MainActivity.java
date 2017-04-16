@@ -111,12 +111,10 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.home) {
             binding.favoriteFragment.setVisibility(View.GONE);
-            /*binding.toolbar.setTitle("Search on FB");*/
             binding.mainFragment.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.favorites) {
             binding.mainFragment.setVisibility(View.GONE);
-            /*binding.toolbar.setTitle("Favorite");*/
             binding.favoriteFragment.setVisibility(View.VISIBLE);
 
         }

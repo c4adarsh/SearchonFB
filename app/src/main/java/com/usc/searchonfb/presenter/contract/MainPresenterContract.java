@@ -12,7 +12,7 @@ import java.util.List;
 public class MainPresenterContract {
 
     public interface View {
-        void addResults(List<SearchData> cemeteryList);
+        void addResults(List<SearchData> searchDataList);
         void clearResults();
         void showContentLoading();
         void hideContentLoading();
@@ -28,15 +28,15 @@ public class MainPresenterContract {
         void load(String query);
         void loadMore();
         void queryChanged(String query);
-        void listItemClicked(SearchData cemetery);
+        void listItemClicked(SearchData searchData);
     }
     public interface Model{
        void onAttach(MainPresenterContract.ModelCallBack mResponseCallBack);
        void onDetach();
     }
     public interface ModelCallBack{
-        void onResultLoad(List<SearchData> cemeteryList);
-        void onResultLoadMore(List<SearchData> cemeteryList);
+        void onResultLoad(List<SearchData> searchDataList);
+        void onResultLoadMore(List<SearchData> searchDataList);
         void onErrorLoad(String mErrorMessage);
         void onErrorLoadMore(String mErrorMessage);
     }

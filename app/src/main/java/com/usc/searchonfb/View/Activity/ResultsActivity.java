@@ -2,17 +2,14 @@ package com.usc.searchonfb.view.activity;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.usc.searchonfb.FacebookApplication;
@@ -22,14 +19,12 @@ import com.usc.searchonfb.dagger.component.ResultFragmentsComponent;
 import com.usc.searchonfb.dagger.module.ActivityModule;
 import com.usc.searchonfb.dagger.module.ResultFragmentModule;
 import com.usc.searchonfb.databinding.ActivityResultsBinding;
-import com.usc.searchonfb.utils.Constants;
 import com.usc.searchonfb.view.fragment.EventFragment;
 import com.usc.searchonfb.view.fragment.GroupFragment;
 import com.usc.searchonfb.view.fragment.PageFragment;
 import com.usc.searchonfb.view.fragment.PlaceFragment;
 import com.usc.searchonfb.view.fragment.UserFragment;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 

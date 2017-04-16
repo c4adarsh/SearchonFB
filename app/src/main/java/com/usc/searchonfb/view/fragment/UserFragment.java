@@ -3,6 +3,7 @@ package com.usc.searchonfb.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static com.usc.searchonfb.utils.Constants.SEARCH_STRING;
+
 /**
  * Created by adarsh on 4/15/2017.
  */
@@ -25,6 +28,8 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
 
     @Inject
     UserFragmentPresenter mPresenter;
+
+    String mSearchString = "";
 
     public UserFragment() {
     }
@@ -43,16 +48,23 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ((ResultsActivity)getActivity()).getResultFragmentComponent().inject(this);
-        if(mPresenter!=null){
-            Toast.makeText(getActivity(),"Success Dude",Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(getActivity(),"Failed Dude",Toast.LENGTH_LONG).show();
+
+        if (getArguments() != null) {
+            mSearchString = getArguments().getString(SEARCH_STRING);
         }
+
+        if(mPresenter!=null){
+            mPresenter.attach(this);
+            mPresenter.load(mSearchString);
+        }
+
     }
 
     @Override
-    public void addResults(List<SearchData> cemeteryList) {
-
+    public void addResults(List<SearchData> searchData) {
+        if(searchData!=null){
+            Log.i(UserFragment.class.getSimpleName(),searchData.size() + "");
+        }
     }
 
     @Override
