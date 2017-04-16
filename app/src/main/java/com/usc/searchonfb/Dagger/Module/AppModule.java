@@ -1,4 +1,4 @@
-package com.usc.searchonfb.Dagger.Module;
+package com.usc.searchonfb.dagger.module;
 
 import android.app.Application;
 

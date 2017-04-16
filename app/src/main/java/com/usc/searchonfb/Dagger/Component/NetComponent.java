@@ -1,9 +1,9 @@
-package com.usc.searchonfb.Dagger.Component;
+package com.usc.searchonfb.dagger.component;
 
 import android.content.SharedPreferences;
 
-import com.usc.searchonfb.Dagger.Module.AppModule;
-import com.usc.searchonfb.Dagger.Module.NetModule;
+import com.usc.searchonfb.dagger.module.AppModule;
+import com.usc.searchonfb.dagger.module.NetModule;
 
 import javax.inject.Singleton;
 

@@ -1,4 +1,4 @@
-package com.usc.searchonfb.Rest.Model.SearchModel;
+package com.usc.searchonfb.rest.model.SearchModel;
 
 /**
  * Created by adarsh on 4/15/2017.

@@ -15,28 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.design.widget.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay">
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-            </android.support.design.widget.AppBarLayout>
-
             <FrameLayout
                 android:id="@+id/main_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="?attr/actionBarSize">
+                android:layout_height="match_parent">
 
                 <fragment
-                    android:name="com.usc.searchonfb.View.Fragment.MainActivityFragment"
+                    android:name="com.usc.searchonfb.view.fragment.MainActivityFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </FrameLayout>
@@ -45,11 +30,10 @@
                 android:id="@+id/favorite_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="?attr/actionBarSize"
                 android:visibility="gone">
 
                 <fragment
-                    android:name="com.usc.searchonfb.View.Fragment.FavoriteActivityFragment"
+                    android:name="com.usc.searchonfb.view.fragment.FavoriteActivityFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </FrameLayout>

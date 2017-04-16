@@ -1,7 +1,6 @@
-package com.usc.searchonfb.View.Fragment;
+package com.usc.searchonfb.view.fragment;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.usc.searchonfb.R;
-import com.usc.searchonfb.databinding.ContentFavoriteBinding;
 import com.usc.searchonfb.databinding.ContentMainBinding;
+import com.usc.searchonfb.view.activity.MainActivity;
+import com.usc.searchonfb.view.activity.ResultsActivity;
 
 public class MainActivityFragment extends Fragment {
 
@@ -38,12 +37,21 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(binding.autoCompleteTextView.getText().toString().length()!=0){
-                    //call the API
+                    Intent mIntent = new Intent(getActivity(), ResultsActivity.class);
+                    mIntent.putExtra("SEARCH_STRING",binding.autoCompleteTextView.getText().toString());
+                    startActivity(mIntent);
+
                 }else{
                     Toast.makeText(getActivity().getApplicationContext(),"Plese enter a keyword!",Toast.LENGTH_LONG).show();
                 }
 
             }
         });
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((MainActivity)getActivity()).setToolbar(binding.toolbar);
     }
 }

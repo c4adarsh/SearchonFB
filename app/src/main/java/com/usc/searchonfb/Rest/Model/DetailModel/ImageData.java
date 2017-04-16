@@ -1,4 +1,4 @@
-package com.usc.searchonfb.Rest.Model.DetailModel;
+package com.usc.searchonfb.rest.model.DetailModel;
 
 import java.util.List;
 

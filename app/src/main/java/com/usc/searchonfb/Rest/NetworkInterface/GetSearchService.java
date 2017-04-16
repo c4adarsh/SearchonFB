@@ -1,6 +1,6 @@
-package com.usc.searchonfb.Rest.NetworkInterface;
+package com.usc.searchonfb.rest.networkInterface;
 
-import com.usc.searchonfb.Rest.Model.SearchModel.SearchDataList;
+import com.usc.searchonfb.rest.model.SearchModel.SearchDataList;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

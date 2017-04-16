@@ -2,10 +2,10 @@ package com.usc.searchonfb;
 
 import android.app.Application;
 
-import com.usc.searchonfb.Dagger.Component.DaggerNetComponent;
-import com.usc.searchonfb.Dagger.Component.NetComponent;
-import com.usc.searchonfb.Dagger.Module.AppModule;
-import com.usc.searchonfb.Dagger.Module.NetModule;
+import com.usc.searchonfb.dagger.component.DaggerNetComponent;
+import com.usc.searchonfb.dagger.component.NetComponent;
+import com.usc.searchonfb.dagger.module.AppModule;
+import com.usc.searchonfb.dagger.module.NetModule;
 
 /**
  * Created by adarsh on 4/15/2017.

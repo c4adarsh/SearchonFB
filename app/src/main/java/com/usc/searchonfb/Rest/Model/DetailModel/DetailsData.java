@@ -1,6 +1,6 @@
-package com.usc.searchonfb.Rest.Model.DetailModel;
+package com.usc.searchonfb.rest.model.DetailModel;
 
-import com.usc.searchonfb.Rest.Model.SearchModel.Picture;
+import com.usc.searchonfb.rest.model.SearchModel.Picture;
 
 /**
  * Created by adarsh on 4/15/2017.
