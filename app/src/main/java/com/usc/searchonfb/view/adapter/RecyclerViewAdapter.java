@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,7 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.searchDataList = data;
     }
 
-    public void loadMoreData(List<SearchData> data){
+    public void loadMoreData(List<SearchData> data) {
         this.searchDataList.addAll(data);
     }
 
@@ -52,70 +53,64 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {/*
-        final Memorial memorial = memorialList.get(position);
+    public void onBindViewHolder(CustomViewHolder holder, int position) {
 
-        //Render image using Picasso library
-        if (!TextUtils.isEmpty(memorial.getThumbnailUrl())) {
-            Picasso.with(mContext).load(memorial.getThumbnailUrl())
-                    *//*.error(R.drawable.placeholder)
-                    * .placeholder(R.drawable.cemetery)*//*
-                    .resize(60,60)
-                    .into(holder.mImageView);
+        final SearchData mSearchData = searchDataList.get(position);
+        if (mSearchData.getName() != null) {
+            holder.mProfileText.setText(mSearchData.getName());
         }
 
-        StringBuilder name = getName(memorial);
-
-        *//*StringBuilder dateOfBirth = DateHelperClass.getDateOfBirth(memorial);
-
-        StringBuilder dateOfDeath = DateHelperClass.getDateOfDeath(memorial);*//*
-
-        dateOfBirth.append(" - ").append(dateOfDeath);
-
-        if(name.toString().trim().length()==0){
-            name.append("Unknown Memorial");
+        if (mSearchData.getPicture() != null) {
+            if (mSearchData.getPicture().getData() != null) {
+                if (mSearchData.getPicture().getData().getUrl() != null) {
+                    String mUrl = mSearchData.getPicture().getData().getUrl();
+                    Picasso.with(mContext).load(mUrl)
+                            .resize(60, 60).into(holder.mProfileImage);
+                }
+            }
         }
-        holder.nameTv.setText(name.toString().trim());
 
-        holder.dateOfBirthTv.setText(dateOfBirth.toString());
-
-        View.OnClickListener listener = new View.OnClickListener() {
+        View.OnClickListener favoriteClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onItemClick(memorial);
+                onItemClickListener.onItemClick(mSearchData);
             }
         };
-        
-        holder.mImageView.setOnClickListener(listener);
-        holder.nameTv.setOnClickListener(listener);
-        holder.dateOfBirthTv.setOnClickListener(listener);
-        holder.dateOfDeathTv.setOnClickListener(listener);
-        holder.itemView.setOnClickListener(listener);
-    */}
+
+        holder.mFavorites.setOnClickListener(favoriteClickListener);
+
+        holder.mNextPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //move to the next activity from here
+            }
+        });
+
+    }
 
     @Override
     public int getItemCount() {
         return (null != searchDataList ? searchDataList.size() : 0);
     }
 
-    class CustomViewHolder extends RecyclerView.ViewHolder{
+    class CustomViewHolder extends RecyclerView.ViewHolder {
 
-        protected ImageView mImageView;
+        protected ImageView mProfileImage;
 
-        protected TextView nameTv;
+        protected TextView mProfileText;
 
-        protected TextView dateOfBirthTv;
+        protected ImageButton mFavorites;
 
-        protected TextView dateOfDeathTv;
+        protected ImageButton mNextPage;
 
         protected View itemView;
 
         public CustomViewHolder(View itemView) {
             super(itemView);
-            /*this.mImageView = (ImageView) itemView.findViewById(R.id.memorial_image);
-            this.nameTv = (TextView) itemView.findViewById(R.id.person_name);
-            this.dateOfBirthTv = (TextView) itemView.findViewById(R.id.date_of_birth);
-            this.dateOfDeathTv = (TextView) itemView.findViewById(R.id.date_of_death);*/
+            this.mProfileImage = (ImageView) itemView.findViewById(R.id.image_search);
+            this.mProfileText = (TextView) itemView.findViewById(R.id.name_search);
+            this.mFavorites = (ImageButton) itemView.findViewById(R.id.favorite_button);
+            this.mNextPage = (ImageButton) itemView.findViewById(R.id.details_button);
             this.itemView = itemView;
         }
 

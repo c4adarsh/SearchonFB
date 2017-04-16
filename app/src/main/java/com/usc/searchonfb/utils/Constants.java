@@ -7,4 +7,8 @@ package com.usc.searchonfb.utils;
 public class Constants {
 
     public static final String SEARCH_STRING = "search_string";
+    public static final String CONST_ID  = "id";
+    public static final String CONST_NAME = "name";
+    public static final String CONST_PICTURE_URL = "url";
+    public static final String CONST_TYPE = "type";
 }
