@@ -13,6 +13,8 @@ import com.usc.searchonfb.databinding.ContentMainBinding;
 import com.usc.searchonfb.view.activity.MainActivity;
 import com.usc.searchonfb.view.activity.ResultsActivity;
 
+import static com.usc.searchonfb.utils.Constants.SEARCH_STRING;
+
 public class MainActivityFragment extends Fragment {
 
     ContentMainBinding binding;
@@ -38,7 +40,7 @@ public class MainActivityFragment extends Fragment {
             public void onClick(View v) {
                 if(binding.autoCompleteTextView.getText().toString().length()!=0){
                     Intent mIntent = new Intent(getActivity(), ResultsActivity.class);
-                    mIntent.putExtra("SEARCH_STRING",binding.autoCompleteTextView.getText().toString());
+                    mIntent.putExtra(SEARCH_STRING,binding.autoCompleteTextView.getText().toString());
                     startActivity(mIntent);
 
                 }else{

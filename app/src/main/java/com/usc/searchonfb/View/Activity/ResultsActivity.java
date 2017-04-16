@@ -22,24 +22,30 @@ import com.usc.searchonfb.dagger.component.ResultFragmentsComponent;
 import com.usc.searchonfb.dagger.module.ActivityModule;
 import com.usc.searchonfb.dagger.module.ResultFragmentModule;
 import com.usc.searchonfb.databinding.ActivityResultsBinding;
+import com.usc.searchonfb.utils.Constants;
 import com.usc.searchonfb.view.fragment.EventFragment;
 import com.usc.searchonfb.view.fragment.GroupFragment;
 import com.usc.searchonfb.view.fragment.PageFragment;
 import com.usc.searchonfb.view.fragment.PlaceFragment;
 import com.usc.searchonfb.view.fragment.UserFragment;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.usc.searchonfb.utils.Constants.SEARCH_STRING;
 
 public class ResultsActivity extends AppCompatActivity {
 
     ActivityResultsBinding binding;
     private ViewPager mViewPager;
     private ResultFragmentsComponent mResultFragmentComponent;
+    private String mSearchString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSearchString = getIntent().getStringExtra(SEARCH_STRING);
         initializeInjector();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_results);
         setUpToolBar();
@@ -120,11 +126,30 @@ public class ResultsActivity extends AppCompatActivity {
 
     public void setupViewPager(ViewPager mViewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new UserFragment(), "Users");
-        adapter.addFrag(new PageFragment(), "Pages");
-        adapter.addFrag(new EventFragment(), "Events");
-        adapter.addFrag(new PlaceFragment(), "Places");
-        adapter.addFrag(new GroupFragment(), "Groups");
+
+        Bundle args = new Bundle();
+        args.putString(SEARCH_STRING, mSearchString);
+
+        UserFragment mUserFragment = new UserFragment();
+        mUserFragment.setArguments(args);
+        adapter.addFrag(mUserFragment, "Users");
+
+        PageFragment mPageFragment = new PageFragment();
+        mPageFragment.setArguments(args);
+        adapter.addFrag(mPageFragment, "Pages");
+
+        EventFragment mEventPageFragment = new EventFragment();
+        mEventPageFragment.setArguments(args);
+        adapter.addFrag(mEventPageFragment, "Events");
+
+        PlaceFragment mPlaceFragment = new PlaceFragment();
+        mPlaceFragment.setArguments(args);
+        adapter.addFrag(mPlaceFragment, "Places");
+
+        GroupFragment mGroupFragment = new GroupFragment();
+        mGroupFragment.setArguments(args);
+        adapter.addFrag(mGroupFragment, "Groups");
+
         mViewPager.setAdapter(adapter);
     }
 
