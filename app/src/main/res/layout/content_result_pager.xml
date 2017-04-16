@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_buttons" />
     
     <LinearLayout
         android:id="@+id/bottom_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:layout_gravity="bottom">
+        android:layout_alignParentBottom="true">
 
         <Button
             android:id="@+id/previous"
@@ -26,5 +33,7 @@
 
     </LinearLayout>
 
-</LinearLayout>
+
+
+</RelativeLayout>
 
