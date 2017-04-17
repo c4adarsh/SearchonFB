@@ -43,7 +43,7 @@ public class DetailDataModel implements DetailsPresenterContract.Model {
     public void onDetach() {
         mResponseCallBack = null;
     }
-
+//134972803193847
     public void loadUserDetails(String id){
         Log.i(DetailDataModel.class.getSimpleName(),"Reached here");
         Observable<DetailsData> observable = mRetrofit.create(GetDetailService.class).getDetailList("134972803193847","correct");

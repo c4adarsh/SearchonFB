@@ -133,7 +133,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
         }
 
         if(mPostFragment!=null){
-            mPostFragment.insertData(mDetailsData);
+            mPostFragment.insertData(mDetailsData,mType);
         }
     }
 
