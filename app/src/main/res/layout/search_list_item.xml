@@ -16,23 +16,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/list_item_selector"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:paddingLeft="10dp"
             android:paddingRight="4dp">
 
             <ImageView
                 android:id="@+id/image_search"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="@drawable/placeholder"
                 android:contentDescription="@string/app_name"
                 android:layout_centerVertical="true"/>
 
             <ImageButton
                 android:id="@+id/details_button"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -41,8 +41,8 @@
 
             <ImageButton
                 android:id="@+id/favorite_button"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_toLeftOf="@+id/details_button"
                 android:layout_toStartOf="@+id/details_button"
                 android:layout_centerVertical="true"
@@ -53,16 +53,14 @@
                 android:id="@+id/name_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/favorite_button"
                 android:layout_toStartOf="@id/favorite_button"
                 android:layout_toRightOf="@id/image_search"
                 android:layout_toEndOf="@id/image_search"
                 android:ellipsize="end"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:textColor="@android:color/black"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"/>
 

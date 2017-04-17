@@ -35,11 +35,12 @@
                 android:layout_toRightOf="@id/image_search"
                 android:layout_toEndOf="@id/image_search"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:text="SpaceX"
                 android:textStyle="bold"
+                android:fontFamily="sans-serif-condensed"
                 android:layout_marginBottom="0dp"
                 android:paddingBottom="0dp"/>
 
@@ -50,13 +51,14 @@
                 android:layout_toRightOf="@id/image_search"
                 android:layout_toEndOf="@id/image_search"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_below="@id/name"
                 android:text="date"
                 android:paddingTop="0dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-condensed"/>
 
             <TextView
                 android:id="@+id/postDetails"
@@ -65,7 +67,7 @@
                 android:layout_toRightOf="@id/image_search"
                 android:layout_toEndOf="@id/image_search"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_below="@id/time"

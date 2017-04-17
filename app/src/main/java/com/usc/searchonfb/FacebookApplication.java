@@ -6,6 +6,7 @@ import com.usc.searchonfb.dagger.component.DaggerNetComponent;
 import com.usc.searchonfb.dagger.component.NetComponent;
 import com.usc.searchonfb.dagger.module.AppModule;
 import com.usc.searchonfb.dagger.module.NetModule;
+import com.facebook.FacebookSdk;
 
 /**
  * Created by adarsh on 4/15/2017.

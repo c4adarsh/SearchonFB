@@ -1,7 +1,8 @@
 package com.usc.searchonfb.view.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.usc.searchonfb.FacebookApplication;
 import com.usc.searchonfb.R;
 import com.usc.searchonfb.dagger.component.DaggerDetailsActivityComponent;
@@ -27,8 +35,10 @@ import com.usc.searchonfb.databinding.ActivityResultsBinding;
 import com.usc.searchonfb.presenter.DetailActivityPresenter;
 import com.usc.searchonfb.presenter.contract.DetailsPresenterContract;
 import com.usc.searchonfb.rest.model.DetailModel.DetailsData;
+import com.usc.searchonfb.rest.model.SearchModel.Picture;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
 import com.usc.searchonfb.utils.FavoriteSharedPreference;
+import com.usc.searchonfb.view.adapter.RecyclerViewPostAdapter;
 import com.usc.searchonfb.view.fragment.AlbumFragment;
 import com.usc.searchonfb.view.fragment.PostsFragment;
 
@@ -56,13 +66,25 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
 
     private PostsFragment mPostFragment = null;
 
+    CallbackManager callbackManager;
+
+    ShareDialog shareDialog;
+
+    String mContentTitle = "Homework8";
+
+    String mImageURL;
+
+    String mShareUrl = "http://adarsh.us-west-2.elasticbeanstalk.com/index/index.html";
+
+    String mContentDescription = "FB SEARCH FROM USC CSCI571";
+
     @Inject
     DetailActivityPresenter mainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        facebookSDKInitialize();
         mSearchData = getIntent().getParcelableExtra(SEARCH_STRING);
         mType = getIntent().getStringExtra(CONST_TYPE);
 
@@ -72,7 +94,81 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
         setUpTabsViewPager();
         mainPresenter.attach(this);
         mainPresenter.load(mSearchData.getId());
+        registerShareDialogCallBacks();
     }
+
+    private void loadShareData(DetailsData mDetailsData) {
+        if (mDetailsData == null) {
+            return;
+        }
+        if (mDetailsData != null) {
+            if(mDetailsData.getName()!=null){
+                mContentTitle = mDetailsData.getName();
+            }
+            Picture picture = mDetailsData.getPicture();
+            if (picture != null && picture.getData() != null) {
+                if (picture.getData().getUrl() != null) {
+                    mImageURL = picture.getData().getUrl();
+                }
+            }
+
+        }
+    }
+
+    private void registerShareDialogCallBacks() {
+        shareDialog = new ShareDialog(this);
+
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                //Toast.makeText(getApplicationContext(),"Successfully Posted",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(getApplicationContext(), "Sharing cancelled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+                Toast.makeText(getApplicationContext(), "Failed to post", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void facebookSDKInitialize() {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+    }
+
+    private void onShare() {
+        if (mImageURL == null) {
+            if (ShareDialog.canShow(ShareLinkContent.class)) {
+                ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                        .setContentTitle(mContentTitle)
+                        .setContentDescription(
+                                mContentDescription)
+                        .setContentUrl(Uri.parse(mShareUrl))
+                        .build();
+
+                shareDialog.show(linkContent);  // Show facebook ShareDialog
+            }
+        } else {
+            if (ShareDialog.canShow(ShareLinkContent.class)) {
+                ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                        .setContentTitle(mContentTitle)
+                        .setImageUrl(Uri.parse(mImageURL))
+                        .setContentDescription(
+                                mContentDescription)
+                        .setContentUrl(Uri.parse(mShareUrl))
+                        .build();
+
+                shareDialog.show(linkContent);  // Show facebook ShareDialog
+            }
+        }
+    }
+
 
     private void initializeInjector() {
         mDaggerDetailComponent = DaggerDetailsActivityComponent.builder()
@@ -130,6 +226,17 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         selectMenu(menu);
         return true;
@@ -157,14 +264,14 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
         switch (item.getItemId()) {
             case R.id.action_add_to_favorites:
                 FavoriteSharedPreference.addFavoriteItem(this, mSearchData, mType);
-                Toast.makeText(this,"Added to Favorites",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_remove_from_favorites:
                 FavoriteSharedPreference.deleteFavoriteItem(this, mSearchData, mType);
-                Toast.makeText(this,"Removed from Favorites",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_share:
-                //showHelp();
+                onShare();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -181,6 +288,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
         if (mPostFragment != null) {
             mPostFragment.insertData(mDetailsData, mType);
         }
+
+        loadShareData(mDetailsData);
     }
 
     @Override
