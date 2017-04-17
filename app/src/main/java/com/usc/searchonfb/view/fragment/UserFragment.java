@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static com.usc.searchonfb.utils.Constants.CONST_USER;
 import static com.usc.searchonfb.utils.Constants.SEARCH_STRING;
 
 /**
@@ -55,7 +56,7 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
         View view =  inflater.inflate(R.layout.content_result_pager, container, false);
         findIds(view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new RecyclerViewAdapter(getActivity(), mSearchData );
+        adapter = new RecyclerViewAdapter(getActivity(), mSearchData, CONST_USER);
         mRecyclerView.setAdapter(adapter);
         return view;
     }

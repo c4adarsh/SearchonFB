@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.usc.searchonfb.R;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
+import com.usc.searchonfb.utils.FavoriteSharedPreference;
 
 import java.util.List;
 
@@ -26,11 +27,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<SearchData> searchDataList;
     private Context mContext;
     private OnItemClickListener onItemClickListener;
+    private String type;
 
 
-    public RecyclerViewAdapter(Context context, List<SearchData> searchDataList) {
+    public RecyclerViewAdapter(Context context, List<SearchData> searchDataList, String type) {
         this.searchDataList = searchDataList;
         this.mContext = context;
+        this.type = type;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -53,11 +56,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
+    public void onBindViewHolder(final CustomViewHolder holder, int position) {
 
         final SearchData mSearchData = searchDataList.get(position);
         if (mSearchData.getName() != null) {
             holder.mProfileText.setText(mSearchData.getName());
+        }
+
+        if (FavoriteSharedPreference.isFavorite(mContext.getApplicationContext(), mSearchData, type)) {
+            holder.mFavorites.setBackgroundResource(R.drawable.favorites_on);
+        } else {
+            holder.mFavorites.setBackgroundResource(R.drawable.favorites_off);
         }
 
         if (mSearchData.getPicture() != null) {
@@ -73,7 +82,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View.OnClickListener favoriteClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onItemClick(mSearchData);
+                if (FavoriteSharedPreference.isFavorite(mContext.getApplicationContext(), mSearchData, type)) {
+                    FavoriteSharedPreference.deleteFavoriteItem(mContext.getApplicationContext(), mSearchData, type);
+                    holder.mFavorites.setBackgroundResource(R.drawable.favorites_off);
+                } else {
+                    FavoriteSharedPreference.addFavoriteItem(mContext.getApplicationContext(), mSearchData, type);
+                    holder.mFavorites.setBackgroundResource(R.drawable.favorites_on);
+                }
             }
         };
 
