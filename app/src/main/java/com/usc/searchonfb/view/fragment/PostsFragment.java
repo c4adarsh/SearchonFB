@@ -5,13 +5,23 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.usc.searchonfb.R;
+import com.usc.searchonfb.rest.model.DetailModel.DetailsData;
 
 /**
  * Created by adarsh on 4/15/2017.
  */
 public class PostsFragment extends Fragment{
+
+
+    private boolean dataInserted = false;
+
+    private DetailsData mDetailData = null;
+
+    private boolean isActivityCreated = false;
+
 
 
     public PostsFragment() {
@@ -33,8 +43,24 @@ public class PostsFragment extends Fragment{
 
     }
 
+    public void insertData(DetailsData pDetailData) {
+        dataInserted = true;
+        mDetailData = pDetailData;
+        if(isActivityCreated){
+            updateUI();
+        }
+    }
+
+    private void updateUI() {
+        Toast.makeText(getActivity(),"In updateUI of post fragment",Toast.LENGTH_LONG).show();
+    }
+
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        isActivityCreated = true;
+        if(dataInserted){
+            updateUI();
+        }
     }
 
 }

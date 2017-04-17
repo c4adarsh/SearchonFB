@@ -16,10 +16,11 @@ import com.usc.searchonfb.rest.model.DetailModel.Posts;
  */
 public class AlbumFragment extends Fragment {
 
+    private boolean dataInserted = false;
 
-    public boolean dataInserted = false;
+    private DetailsData mDetailData = null;
 
-    public DetailsData mDetailData = null;
+    private boolean isActivityCreated = false;
 
     public AlbumFragment() {
     }
@@ -41,26 +42,34 @@ public class AlbumFragment extends Fragment {
 
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     public void insertData(DetailsData pDetailData) {
         dataInserted = true;
         mDetailData = pDetailData;
-        updateUI();
-
+        if(isActivityCreated){
+            updateUI();
+        }
     }
 
     private void updateUI() {
-        
+        if(mDetailData!=null){
+            if(mDetailData.getAlbums()!=null){
+                showDataFoundPage();
+                Toast.makeText(getActivity(),"In updateUI of album fragment",Toast.LENGTH_LONG).show();
+            }
+        }
+
     }
 
-    @Override
-    public void onDestroy() {
-        dataInserted = false;
-        mDetailData = null;
-        super.onDestroy();
+    private void showDataFoundPage() {
+
     }
+
+    @Override public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        isActivityCreated = true;
+        if (dataInserted) {
+            updateUI();
+        }
+    }
+
 }
