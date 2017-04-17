@@ -1,6 +1,7 @@
 package com.usc.searchonfb.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,7 +15,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.usc.searchonfb.R;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
+import com.usc.searchonfb.utils.Constants;
 import com.usc.searchonfb.utils.FavoriteSharedPreference;
+import com.usc.searchonfb.view.activity.DetailsActivity;
 
 import java.util.List;
 
@@ -97,7 +100,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mNextPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //move to the next activity from here
+                Intent mIntent = new Intent(mContext, DetailsActivity.class);
+                mIntent.putExtra(Constants.SEARCH_STRING,mSearchData);
+                mIntent.putExtra(Constants.CONST_TYPE,type);
+                mContext.startActivity(mIntent);
             }
         });
 

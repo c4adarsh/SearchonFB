@@ -35,6 +35,17 @@
                 android:value=".view.activity.MainActivity" />
         </activity>
 
+        <activity android:name=".view.activity.DetailsActivity"
+            android:label="@string/title_details"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".view.activity.ResultsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activity.ResultsActivity" />
+        </activity>
+
+
+
     </application>
 
 </manifest>
