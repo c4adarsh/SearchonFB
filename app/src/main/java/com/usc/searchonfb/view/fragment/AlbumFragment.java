@@ -27,6 +27,8 @@ public class AlbumFragment extends Fragment {
 
     private TextView errorTv = null;
 
+    static int lastExpandedPosition = -1;
+
     private ExpandableListView mExpandableListView = null;
 
     public AlbumFragment() {
@@ -69,6 +71,7 @@ public class AlbumFragment extends Fragment {
                     ExpandableListAdapter mExpandableAdapter = new ExpandableListAdapter(getActivity(), mItem.getmHeaderList(), mItem.getmExpandableListData());
                     // setting list adapter
                     mExpandableListView.setAdapter(mExpandableAdapter);
+                    initializeGroupListener();
                     mExpandableListView.setVisibility(View.VISIBLE);
                     errorTv.setVisibility(View.GONE);
                 }else{
@@ -84,6 +87,21 @@ public class AlbumFragment extends Fragment {
             errorTv.setVisibility(View.VISIBLE);
         }
 
+    }
+
+
+    private void initializeGroupListener() {
+        lastExpandedPosition = -1;
+        mExpandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (lastExpandedPosition != -1
+                        && groupPosition != lastExpandedPosition) {
+                    mExpandableListView.collapseGroup(lastExpandedPosition);
+                }
+                lastExpandedPosition = groupPosition;
+            }
+        });
     }
 
     private void showDataFoundPage() {

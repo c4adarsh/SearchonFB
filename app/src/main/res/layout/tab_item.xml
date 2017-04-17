@@ -4,7 +4,7 @@
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:orientation="vertical"
-tools:ignore="UseCompoundDrawables" >  <!-- This will remove the warning -->
+tools:ignore="UseCompoundDrawables">
 
 <ImageView
     android:id="@+id/image_view_tab"
@@ -19,5 +19,6 @@ tools:ignore="UseCompoundDrawables" >  <!-- This will remove the warning -->
     android:textSize="@dimen/tab_label"
     android:fontFamily="@string/font_fontFamily_medium"
     android:layout_gravity="center"
-    android:layout_marginTop="5dp"/>
+    android:layout_marginTop="5dp"
+    android:textColor="@android:color/black"/>
 </LinearLayout>

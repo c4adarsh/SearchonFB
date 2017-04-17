@@ -133,13 +133,13 @@ public class ResultsActivity extends AppCompatActivity {
         mPageFragment.setArguments(args);
         adapter.addFrag(mPageFragment, "Pages");
 
-        EventFragment mEventPageFragment = new EventFragment();
-        mEventPageFragment.setArguments(args);
-        adapter.addFrag(mEventPageFragment, "Events");
-
         PlaceFragment mPlaceFragment = new PlaceFragment();
         mPlaceFragment.setArguments(args);
         adapter.addFrag(mPlaceFragment, "Places");
+
+        EventFragment mEventPageFragment = new EventFragment();
+        mEventPageFragment.setArguments(args);
+        adapter.addFrag(mEventPageFragment, "Events");
 
         GroupFragment mGroupFragment = new GroupFragment();
         mGroupFragment.setArguments(args);

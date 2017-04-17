@@ -125,8 +125,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
 
     @Override
     public void addResults(DetailsData mDetailsData) {
-        //the result comes here, we have to give this data to fragment, broadcast telling that the data is ready or we can also get an instance of the fragment and give it to the fragment.
-        Log.i("ResultData",mDetailsData+"");
 
         if(mAlbumFragment!=null){
             mAlbumFragment.insertData(mDetailsData);
@@ -164,7 +162,14 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
 
     @Override
     public void showContentError() {
+      //show posts and albums as error
+        if(mAlbumFragment!=null){
+            mAlbumFragment.insertData(null);
+        }
 
+        if(mPostFragment!=null){
+            mPostFragment.insertData(null,mType);
+        }
     }
 
     @Override

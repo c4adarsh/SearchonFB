@@ -45,13 +45,19 @@ public class GetExpandableList {
                         header = eachAlbum.getName();
                         mHeaderList.add(header);
                         Photos mPhotos = eachAlbum.getPhotos();
-                        if (mPhotos.getData() != null) {
+                        if (mPhotos!=null && mPhotos.getData() != null) {
                             List<ImageData> mListImageData = mPhotos.getData();
                             for (ImageData mImageData : mListImageData) {
                                 if (mImageData.getImages() != null) {
                                     List<Images> mImages = mImageData.getImages();
                                     if(mImages.size()>0){
-                                        String image = mImages.get(0).getSource();
+                                        //String image = mImages.get(0).getSource();
+                                        String image = null;
+                                        if(mImages.size()>2){
+                                            image = mImages.get(2).getSource();
+                                        }else{
+                                            image = mImages.get(0).getSource();
+                                        }
                                         if(image!=null){
                                             mChildList.add(image);
                                         }

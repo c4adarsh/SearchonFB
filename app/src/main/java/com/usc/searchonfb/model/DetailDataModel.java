@@ -46,7 +46,7 @@ public class DetailDataModel implements DetailsPresenterContract.Model {
 //134972803193847
     public void loadUserDetails(String id){
         Log.i(DetailDataModel.class.getSimpleName(),"Reached here");
-        Observable<DetailsData> observable = mRetrofit.create(GetDetailService.class).getDetailList("134972803193847","correct");
+        Observable<DetailsData> observable = mRetrofit.create(GetDetailService.class).getDetailList(id,"correct");
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
