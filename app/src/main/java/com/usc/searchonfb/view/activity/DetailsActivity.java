@@ -1,6 +1,7 @@
 package com.usc.searchonfb.view.activity;
 
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,9 +10,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.usc.searchonfb.FacebookApplication;
 import com.usc.searchonfb.R;
@@ -23,6 +28,7 @@ import com.usc.searchonfb.presenter.DetailActivityPresenter;
 import com.usc.searchonfb.presenter.contract.DetailsPresenterContract;
 import com.usc.searchonfb.rest.model.DetailModel.DetailsData;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
+import com.usc.searchonfb.utils.FavoriteSharedPreference;
 import com.usc.searchonfb.view.fragment.AlbumFragment;
 import com.usc.searchonfb.view.fragment.PostsFragment;
 
@@ -48,7 +54,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
 
     private AlbumFragment mAlbumFragment = null;
 
-    private  PostsFragment mPostFragment = null;
+    private PostsFragment mPostFragment = null;
 
     @Inject
     DetailActivityPresenter mainPresenter;
@@ -71,7 +77,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
     private void initializeInjector() {
         mDaggerDetailComponent = DaggerDetailsActivityComponent.builder()
                 .detailsFragmentModule(new DetailsFragmentModule())
-                .netComponent(((FacebookApplication)getApplicationContext()).getNetComponent())
+                .netComponent(((FacebookApplication) getApplicationContext()).getNetComponent())
                 .build();
         mDaggerDetailComponent.inject(this);
     }
@@ -99,17 +105,17 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
     }
 
     private void setupTabIcons() {
-        View tabOne =  LayoutInflater.from(this).inflate(R.layout.tab_item, null);
-        ImageView mImageView = (ImageView)tabOne.findViewById(R.id.image_view_tab);
+        View tabOne = LayoutInflater.from(this).inflate(R.layout.tab_item, null);
+        ImageView mImageView = (ImageView) tabOne.findViewById(R.id.image_view_tab);
         mImageView.setImageResource(R.drawable.albums);
-        TextView mTextView = (TextView)tabOne.findViewById(R.id.text_view_tab);
+        TextView mTextView = (TextView) tabOne.findViewById(R.id.text_view_tab);
         mTextView.setText("Albums");
         binding.tabs.getTabAt(0).setCustomView(tabOne);
 
-        View tabTwo =  LayoutInflater.from(this).inflate(R.layout.tab_item, null);
-        mImageView = (ImageView)tabTwo.findViewById(R.id.image_view_tab);
+        View tabTwo = LayoutInflater.from(this).inflate(R.layout.tab_item, null);
+        mImageView = (ImageView) tabTwo.findViewById(R.id.image_view_tab);
         mImageView.setImageResource(R.drawable.posts);
-        mTextView = (TextView)tabTwo.findViewById(R.id.text_view_tab);
+        mTextView = (TextView) tabTwo.findViewById(R.id.text_view_tab);
         mTextView.setText("Posts");
         binding.tabs.getTabAt(1).setCustomView(tabTwo);
     }
@@ -124,14 +130,56 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        selectMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        selectMenu(menu);
+        return true;
+    }
+
+    private void selectMenu(Menu menu) {
+        menu.clear();
+        MenuInflater inflater = getMenuInflater();
+
+        if (FavoriteSharedPreference.isFavorite(this, mSearchData, mType)) {
+            inflater.inflate(R.menu.menu_remove_favorites, menu);
+        } else {
+            inflater.inflate(R.menu.menu_add_favorites, menu);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_to_favorites:
+                FavoriteSharedPreference.addFavoriteItem(this, mSearchData, mType);
+                Toast.makeText(this,"Added to Favorites",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_remove_from_favorites:
+                FavoriteSharedPreference.deleteFavoriteItem(this, mSearchData, mType);
+                Toast.makeText(this,"Removed from Favorites",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_share:
+                //showHelp();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void addResults(DetailsData mDetailsData) {
 
-        if(mAlbumFragment!=null){
+        if (mAlbumFragment != null) {
             mAlbumFragment.insertData(mDetailsData);
         }
 
-        if(mPostFragment!=null){
-            mPostFragment.insertData(mDetailsData,mType);
+        if (mPostFragment != null) {
+            mPostFragment.insertData(mDetailsData, mType);
         }
     }
 
@@ -162,13 +210,13 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
 
     @Override
     public void showContentError() {
-      //show posts and albums as error
-        if(mAlbumFragment!=null){
+        //show posts and albums as error
+        if (mAlbumFragment != null) {
             mAlbumFragment.insertData(null);
         }
 
-        if(mPostFragment!=null){
-            mPostFragment.insertData(null,mType);
+        if (mPostFragment != null) {
+            mPostFragment.insertData(null, mType);
         }
     }
 

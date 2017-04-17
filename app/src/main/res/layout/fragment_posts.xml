@@ -16,7 +16,8 @@
         android:visibility="gone"
         android:gravity="center"
         android:textSize="20sp"
-        android:text="No Posts Found"/>
+        android:text="No Posts Found"
+        android:textColor="@android:color/black"/>
 
 </RelativeLayout>
 

@@ -51,6 +51,14 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(adapter!=null){
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.content_result_pager, container, false);

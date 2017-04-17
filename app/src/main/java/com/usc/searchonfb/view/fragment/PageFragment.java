@@ -64,6 +64,14 @@ public class PageFragment extends Fragment implements MainPresenterContract.View
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(adapter!=null){
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     private void findIds(View v) {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
     }

@@ -16,7 +16,8 @@
         android:visibility="gone"
         android:text="No Albums Found"
         android:gravity="center"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:textColor="@android:color/black"/>
 
 </RelativeLayout>
 

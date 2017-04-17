@@ -16,10 +16,16 @@ import com.usc.searchonfb.rest.model.DetailModel.PostsData;
 import com.usc.searchonfb.rest.model.SearchModel.Picture;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
 import com.usc.searchonfb.utils.Constants;
+import com.usc.searchonfb.utils.DateUtils;
 import com.usc.searchonfb.utils.FavoriteSharedPreference;
 import com.usc.searchonfb.view.activity.DetailsActivity;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by adarsh on 4/4/2017.
@@ -67,7 +73,10 @@ public class RecyclerViewPostAdapter extends RecyclerView.Adapter<RecyclerViewPo
 
         final PostsData mPostData = postDataList.get(position);
         if (mPostData.getCreated_time() != null) {
-            holder.mDate.setText(mPostData.getCreated_time());
+            String value = DateUtils.getFormattedDate(mPostData.getCreated_time());
+            if(value!=null){
+                holder.mDate.setText(value);
+            }
         }
 
         if (picture != null) {
@@ -93,6 +102,8 @@ public class RecyclerViewPostAdapter extends RecyclerView.Adapter<RecyclerViewPo
         }
 
     }
+
+
 
     @Override
     public int getItemCount() {
