@@ -15,6 +15,7 @@ import com.usc.searchonfb.R;
 import com.usc.searchonfb.presenter.UserFragmentPresenter;
 import com.usc.searchonfb.presenter.contract.MainPresenterContract;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
+import com.usc.searchonfb.utils.FavoriteSharedPreference;
 import com.usc.searchonfb.view.activity.ResultsActivity;
 import com.usc.searchonfb.view.adapter.RecyclerViewAdapter;
 
@@ -23,6 +24,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static com.usc.searchonfb.utils.Constants.CALL_FROM_FAVORITES;
 import static com.usc.searchonfb.utils.Constants.CONST_USER;
 import static com.usc.searchonfb.utils.Constants.SEARCH_STRING;
 
@@ -34,7 +36,7 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
     @Inject
     UserFragmentPresenter mPresenter;
 
-    String mSearchString = "";
+    String mSearchString = null;
 
     List<SearchData> mSearchData = new ArrayList<>();
 
@@ -42,18 +44,27 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
 
     private RecyclerViewAdapter adapter;
 
+    boolean callFromFavorites = false;
+
     public UserFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mSearchString = getArguments().getString(SEARCH_STRING);
+            callFromFavorites = getArguments().getBoolean(CALL_FROM_FAVORITES,callFromFavorites);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if(adapter!=null){
+            if(callFromFavorites){
+                addResults(FavoriteSharedPreference.getFavouriteList(getActivity(),CONST_USER));
+            }
             adapter.notifyDataSetChanged();
         }
     }
@@ -64,7 +75,7 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
         View view =  inflater.inflate(R.layout.content_result_pager, container, false);
         findIds(view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new RecyclerViewAdapter(getActivity(), mSearchData, CONST_USER);
+        adapter = new RecyclerViewAdapter(getActivity(), mSearchData, CONST_USER,callFromFavorites);
         mRecyclerView.setAdapter(adapter);
         return view;
     }
@@ -75,18 +86,23 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((ResultsActivity)getActivity()).getResultFragmentComponent().inject(this);
 
-        if (getArguments() != null) {
-            mSearchString = getArguments().getString(SEARCH_STRING);
+        if(mSearchString!=null){
+            ((ResultsActivity)getActivity()).getResultFragmentComponent().inject(this);
         }
 
-        if(mPresenter!=null){
+        if(mSearchString!=null && mPresenter!=null ){
             mPresenter.attach(this);
             mPresenter.load(mSearchString);
         }
 
+        if(callFromFavorites){
+            addResults(FavoriteSharedPreference.getFavouriteList(getActivity(),CONST_USER));
+        }
+
     }
+
+
 
     @Override
     public void addResults(List<SearchData> searchData) {

@@ -18,5 +18,6 @@ public class Constants {
     public static final String CONST_EVENT = "Event";
     public static final String CONST_PAGE = "Page";
     public static final String CONST_GROUP = "Group";
+    public static final String CALL_FROM_FAVORITES = "call from favorites";
 
 }

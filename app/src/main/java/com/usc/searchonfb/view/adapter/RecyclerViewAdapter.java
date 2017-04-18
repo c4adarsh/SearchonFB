@@ -21,6 +21,8 @@ import com.usc.searchonfb.view.activity.DetailsActivity;
 
 import java.util.List;
 
+import static com.usc.searchonfb.utils.Constants.CONST_USER;
+
 /**
  * Created by adarsh on 4/4/2017.
  */
@@ -31,12 +33,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private OnItemClickListener onItemClickListener;
     private String type;
+    private boolean isFavorite = false;
 
 
-    public RecyclerViewAdapter(Context context, List<SearchData> searchDataList, String type) {
+    public RecyclerViewAdapter(Context context, List<SearchData> searchDataList, String type, boolean isFavorite) {
         this.searchDataList = searchDataList;
         this.mContext = context;
         this.type = type;
+        this.isFavorite = isFavorite;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -92,6 +96,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     FavoriteSharedPreference.addFavoriteItem(mContext.getApplicationContext(), mSearchData, type);
                     holder.mFavorites.setBackgroundResource(R.drawable.favorites_on);
                 }
+
+                if(isFavorite){
+                    updateData();
+                }
             }
         };
 
@@ -107,6 +115,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+    }
+
+    private void updateData() {
+        setData(FavoriteSharedPreference.getFavouriteList(mContext,type));
+        notifyDataSetChanged();
     }
 
     @Override
