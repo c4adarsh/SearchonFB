@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.usc.searchonfb.R;
@@ -48,6 +49,9 @@ public class EventFragment extends Fragment implements MainPresenterContract.Vie
 
     boolean callFromFavorites = false;
 
+    LinearLayout mButtonLayout;
+
+
     public EventFragment() {
     }
 
@@ -79,11 +83,15 @@ public class EventFragment extends Fragment implements MainPresenterContract.Vie
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new RecyclerViewAdapter(getActivity(), mSearchData, CONST_EVENT,callFromFavorites);
         mRecyclerView.setAdapter(adapter);
+        if(callFromFavorites){
+            mButtonLayout.setVisibility(View.GONE);
+        }
         return view;
     }
 
     private void findIds(View v) {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+        mButtonLayout = (LinearLayout) v.findViewById(R.id.btns);
     }
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {

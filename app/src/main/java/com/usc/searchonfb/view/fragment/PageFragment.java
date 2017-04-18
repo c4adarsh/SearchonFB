@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.usc.searchonfb.R;
 import com.usc.searchonfb.presenter.PageFragmentPresenter;
@@ -43,6 +44,8 @@ public class PageFragment extends Fragment implements MainPresenterContract.View
 
     boolean callFromFavorites = false;
 
+    LinearLayout mButtonLayout;
+
     public PageFragment() {
     }
 
@@ -74,11 +77,15 @@ public class PageFragment extends Fragment implements MainPresenterContract.View
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new RecyclerViewAdapter(getActivity(), mSearchData, CONST_PAGE,callFromFavorites);
         mRecyclerView.setAdapter(adapter);
+        if(callFromFavorites){
+            mButtonLayout.setVisibility(View.GONE);
+        }
         return view;
     }
 
     private void findIds(View v) {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+        mButtonLayout = (LinearLayout) v.findViewById(R.id.btns);
     }
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {

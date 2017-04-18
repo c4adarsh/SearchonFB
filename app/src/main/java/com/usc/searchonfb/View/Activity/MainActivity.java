@@ -1,6 +1,7 @@
 package com.usc.searchonfb.view.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
@@ -117,6 +118,9 @@ public class MainActivity extends AppCompatActivity
             binding.mainFragment.setVisibility(View.GONE);
             binding.favoriteFragment.setVisibility(View.VISIBLE);
 
+        } else if(id == R.id.about_me){
+            Intent mIntent = new Intent(this, AboutMeActivity.class);
+            startActivity(mIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
