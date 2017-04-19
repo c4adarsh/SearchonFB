@@ -13,4 +13,5 @@ import retrofit2.http.Query;
 public interface GetDetailService {
     @GET("search_aws.php?")
     Observable<DetailsData> getDetailList(@Query("id") String id, @Query("details") String details);
+
 }

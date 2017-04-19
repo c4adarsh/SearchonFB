@@ -40,9 +40,17 @@ public class GroupDataModel implements MainPresenterContract.Model {
         mResponseCallBack = null;
     }
 
-    public void loadUserDetails(String SearchQuery){
-        Log.i(GroupDataModel.class.getSimpleName(),"Reached here");
-        Observable<SearchDataList> observable = mRetrofit.create(GetSearchService.class).getDataList(SearchQuery,"group");
+    public void loadUserDetails(String SearchQuery, int offset, String url){
+        //Log.i(GroupDataModel.class.getSimpleName(),"Reached here");
+
+        Observable<SearchDataList> observable;
+
+        if(url==null){
+            observable =mRetrofit.create(GetSearchService.class).getDataList(SearchQuery,"group",offset);
+        }else{
+            observable = mRetrofit.create(GetSearchService.class).getDataListUrl(url);
+        }
+
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -54,7 +62,7 @@ public class GroupDataModel implements MainPresenterContract.Model {
 
                     @Override
                     public void onNext(SearchDataList mSearchDataList) {
-                        mResponseCallBack.onResultLoad(mSearchDataList.getSearchDataList());
+                        mResponseCallBack.onResultLoad(mSearchDataList.getSearchDataList(),mSearchDataList.getPaging());
                     }
 
                     @Override

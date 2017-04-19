@@ -40,9 +40,16 @@ public class PageDataModel implements MainPresenterContract.Model {
         mResponseCallBack = null;
     }
 
-    public void loadUserDetails(String SearchQuery){
-        Log.i(PageDataModel.class.getSimpleName(),"Reached here");
-        Observable<SearchDataList> observable = mRetrofit.create(GetSearchService.class).getDataList(SearchQuery,"Page");
+    public void loadUserDetails(String SearchQuery,int offset, String url){
+
+        Observable<SearchDataList> observable;
+
+        if(url==null){
+            observable = mRetrofit.create(GetSearchService.class).getDataList(SearchQuery,"Page",offset);
+        }else{
+            observable = mRetrofit.create(GetSearchService.class).getDataListUrl(url);
+        }
+
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -54,7 +61,7 @@ public class PageDataModel implements MainPresenterContract.Model {
 
                     @Override
                     public void onNext(SearchDataList mSearchDataList) {
-                        mResponseCallBack.onResultLoad(mSearchDataList.getSearchDataList());
+                        mResponseCallBack.onResultLoad(mSearchDataList.getSearchDataList(),mSearchDataList.getPaging());
                     }
 
                     @Override

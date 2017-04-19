@@ -20,7 +20,7 @@ public class FacebookApplication  extends Application {
         super.onCreate();
         mNetComponent = DaggerNetComponent.builder()
                 .appModule(new AppModule(this))
-                .netModule(new NetModule("http://adarsh.us-west-2.elasticbeanstalk.com/index/"))
+                .netModule(new NetModule("http://adarsh1.us-west-2.elasticbeanstalk.com/"))
                 .build();
     }
 

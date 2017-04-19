@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.usc.searchonfb.model.UserDataModel;
 import com.usc.searchonfb.presenter.contract.MainPresenterContract;
+import com.usc.searchonfb.rest.model.SearchModel.Paging;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
 
 import java.util.List;
@@ -39,9 +40,9 @@ public class UserFragmentPresenter implements MainPresenterContract.Presenter, M
 
 
     @Override
-    public void load(String searchQuery) {
+    public void load(String searchQuery, int offset, String url) {
         if(mMainView!=null){
-            model.loadUserDetails(searchQuery);
+            model.loadUserDetails(searchQuery,offset, url);
         }else{
             Log.i("Adarsh","mMainView is null");
         }
@@ -71,21 +72,21 @@ public class UserFragmentPresenter implements MainPresenterContract.Presenter, M
     //These are the main model call backs
 
     @Override
-    public void onResultLoadMore(List<SearchData> mData) {
+    public void onResultLoadMore(List<SearchData> mData, Paging mPaging) {
         if(mMainView!=null){
-            mMainView.addResults(mData);
+            mMainView.addResults(mData,mPaging);
         }
     }
 
     @Override
-    public void onResultLoad(List<SearchData> mSeachList) {
+    public void onResultLoad(List<SearchData> mSeachList, Paging mPaging) {
         if(mMainView!=null){
             //Log.i("Adarsh","I am here1 dude");
             if(mSeachList.size()==0){
-                mMainView.showEmptyResultsView();
+                mMainView.showEmptyResultsView(mPaging);
             }else{
                 mMainView.clearResults();
-                mMainView.addResults(mSeachList);
+                mMainView.addResults(mSeachList,mPaging);
             }
         }else{
             //Log.i("Adarsh","I am here dude");

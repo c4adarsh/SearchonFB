@@ -40,9 +40,14 @@ public class PlaceDataModel implements MainPresenterContract.Model {
         mResponseCallBack = null;
     }
 
-    public void loadUserDetails(String SearchQuery){
-        Log.i(PlaceDataModel.class.getSimpleName(),"Reached here");
-        Observable<SearchDataList> observable = mRetrofit.create(GetSearchService.class).getDataList(SearchQuery,"Place");
+    public void loadUserDetails(String SearchQuery, int offset, String url){
+        //Log.i(PlaceDataModel.class.getSimpleName(),"Reached here");
+        Observable<SearchDataList> observable;
+        if(url==null){
+            observable = mRetrofit.create(GetSearchService.class).getDataList(SearchQuery,"Place",offset);
+        }else{
+            observable = mRetrofit.create(GetSearchService.class).getDataListUrl(url);
+        }
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -54,7 +59,7 @@ public class PlaceDataModel implements MainPresenterContract.Model {
 
                     @Override
                     public void onNext(SearchDataList mSearchDataList) {
-                        mResponseCallBack.onResultLoad(mSearchDataList.getSearchDataList());
+                        mResponseCallBack.onResultLoad(mSearchDataList.getSearchDataList(),mSearchDataList.getPaging());
                     }
 
                     @Override

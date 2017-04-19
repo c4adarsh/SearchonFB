@@ -12,5 +12,8 @@ import retrofit2.http.Query;
 
 public interface GetSearchService {
     @GET("search_aws.php?")
-    Observable<SearchDataList> getDataList(@Query("search_query") String query,@Query("type") String type);
+    Observable<SearchDataList> getDataList(@Query("search_query") String query,@Query("type") String type, @Query("offset1") int offset);
+
+    @GET("search_aws.php?")
+    Observable<SearchDataList> getDataListUrl(@Query("urlSearch") String urlSearch);
 }

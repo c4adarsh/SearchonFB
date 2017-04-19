@@ -138,13 +138,13 @@ public class FavoriteSharedPreference {
         }
 
         Picture picture = new Picture(new Data(pictureUrl));
-        SearchData mData = new SearchData(id,link,name,picture);
+        SearchData mData = new SearchData(id, link, name, picture);
         return mData;
     }
 
     private static synchronized SharedPreferences getSharedPreference(Context app, String type) {
         SharedPreferences mSharedPreferneces;
-
+       //get the shared preferences, type is users, places, groups, pages..
         mSharedPreferneces = app
                 .getSharedPreferences(type, PREFERENCE_MODE_PRIVATE);
 

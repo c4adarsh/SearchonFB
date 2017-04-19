@@ -1,6 +1,7 @@
 package com.usc.searchonfb.presenter.contract;
 
 import com.usc.searchonfb.presenter.basepresenter.BasePresenterInterface;
+import com.usc.searchonfb.rest.model.SearchModel.Paging;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class MainPresenterContract {
 
     public interface View {
-        void addResults(List<SearchData> searchDataList);
+        void addResults(List<SearchData> searchDataList,Paging mPaging);
         void clearResults();
         void showContentLoading();
         void hideContentLoading();
@@ -21,11 +22,11 @@ public class MainPresenterContract {
         void showContentError();
         void hideContentError();
         void showListError();
-        void showEmptyResultsView();
+        void showEmptyResultsView(Paging mPaging);
         void hideEmptyResultsView();
     }
     public interface Presenter extends BasePresenterInterface<View> {
-        void load(String query);
+        void load(String query, int offset, String url);
         void loadMore();
         void queryChanged(String query);
         void listItemClicked(SearchData searchData);
@@ -35,8 +36,8 @@ public class MainPresenterContract {
        void onDetach();
     }
     public interface ModelCallBack{
-        void onResultLoad(List<SearchData> searchDataList);
-        void onResultLoadMore(List<SearchData> searchDataList);
+        void onResultLoad(List<SearchData> searchDataList, Paging paging);
+        void onResultLoadMore(List<SearchData> searchDataList, Paging paging);
         void onErrorLoad(String mErrorMessage);
         void onErrorLoadMore(String mErrorMessage);
     }

@@ -8,14 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.usc.searchonfb.R;
 import com.usc.searchonfb.presenter.GroupFragmentPresenter;
 import com.usc.searchonfb.presenter.PageFragmentPresenter;
 import com.usc.searchonfb.presenter.contract.MainPresenterContract;
+import com.usc.searchonfb.rest.model.SearchModel.Paging;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
 import com.usc.searchonfb.utils.FavoriteSharedPreference;
+import com.usc.searchonfb.utils.NextPrevUtil;
 import com.usc.searchonfb.view.activity.ResultsActivity;
 import com.usc.searchonfb.view.adapter.RecyclerViewAdapter;
 
@@ -50,6 +53,17 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
 
     LinearLayout mButtonLayout;
 
+    Paging mPaging;
+
+    //newly added
+    Button mNextButton;
+
+    Button mPreviousButton;
+
+    String nextUrl = null;
+
+    String previousUrl = null;
+
 
     public GroupFragment() {
         // Required empty public constructor
@@ -75,6 +89,8 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
         if(callFromFavorites){
             mButtonLayout.setVisibility(View.GONE);
         }
+        //newly added code
+        setOnclickListenersNextprev();
         return view;
     }
 
@@ -83,7 +99,7 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
         super.onResume();
         if(adapter!=null){
             if(callFromFavorites){
-                addResults(FavoriteSharedPreference.getFavouriteList(getActivity(),CONST_GROUP));
+                addResults(FavoriteSharedPreference.getFavouriteList(getActivity(),CONST_GROUP),null);
             }
             adapter.notifyDataSetChanged();
         }
@@ -92,6 +108,9 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
     private void findIds(View v) {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         mButtonLayout = (LinearLayout) v.findViewById(R.id.btns);
+        //newly added
+        mNextButton = (Button) v.findViewById(R.id.next);
+        mPreviousButton = (Button) v.findViewById(R.id.previous);
     }
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {
@@ -102,22 +121,69 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
 
         if(mSearchString!=null && mPresenter!=null ){
             mPresenter.attach(this);
-            mPresenter.load(mSearchString);
+            mPresenter.load(mSearchString, 0, null);
         }
 
         if(callFromFavorites){
-            addResults(FavoriteSharedPreference.getFavouriteList(getActivity(),CONST_GROUP));
+            addResults(FavoriteSharedPreference.getFavouriteList(getActivity(),CONST_GROUP),null);
         }
 
     }
 
     @Override
-    public void addResults(List<SearchData> searchData) {
+    public void addResults(List<SearchData> searchData,Paging mPaging) {
         if(searchData!=null){
             Log.i(UserFragment.class.getSimpleName(),searchData.size() + "");
             adapter.setData(searchData);
             adapter.notifyDataSetChanged();
         }
+
+        if(mPaging!=null){
+            this.mPaging = mPaging;
+        }
+
+        //newly added code
+        handleNextPrevVisibility(mPaging);
+    }
+
+    //newly added code
+    private void handleNextPrevVisibility(Paging mPaging) {
+        nextUrl = NextPrevUtil.getNextOffset(mPaging);
+        previousUrl = NextPrevUtil.getPreviosOffset(mPaging);
+
+        if (nextUrl != null) {
+            mNextButton.setEnabled(true);
+        }
+
+        if (previousUrl != null) {
+            mPreviousButton.setEnabled(true);
+        }
+    }
+
+    //newly added code
+    private void setOnclickListenersNextprev() {
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNextButton.setEnabled(false);
+                mPreviousButton.setEnabled(false);
+                if (mPresenter != null && nextUrl != null && mSearchString != null) {
+                    mPresenter.load(mSearchString, 0, nextUrl);
+                }
+
+            }
+        });
+
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNextButton.setEnabled(false);
+                mPreviousButton.setEnabled(false);
+                if (mPresenter != null && previousUrl != null && mSearchString != null) {
+                    mPresenter.load(mSearchString, 0, previousUrl);
+                }
+            }
+        });
     }
 
     @Override
@@ -161,8 +227,13 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
     }
 
     @Override
-    public void showEmptyResultsView() {
+    public void showEmptyResultsView(Paging mPaging) {
+        //newly added
 
+        //tell there is no data to show here
+        //this is facebooks error
+        //Page empty should pop up here
+        handleNextPrevVisibility(mPaging);
     }
 
     @Override

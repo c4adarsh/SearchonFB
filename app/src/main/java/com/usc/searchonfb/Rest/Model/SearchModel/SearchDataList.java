@@ -11,7 +11,18 @@ import java.util.List;
 public class SearchDataList {
 
     @SerializedName("data")
-    private List<SearchData> searchDataList;
+    List<SearchData> searchDataList;
+
+    Paging paging;
+
+    public void setSearchDataList(List<SearchData> searchDataList) {
+        this.searchDataList = searchDataList;
+    }
+
+    public SearchDataList(List<SearchData> searchDataList, Paging paging) {
+        this.searchDataList = searchDataList;
+        this.paging = paging;
+    }
 
     public SearchDataList(List<SearchData> searchDataList) {
         this.searchDataList = searchDataList;
@@ -19,5 +30,13 @@ public class SearchDataList {
 
     public List<SearchData> getSearchDataList() {
         return searchDataList;
+    }
+
+    public Paging getPaging() {
+        return paging;
+    }
+
+    public void setPaging(Paging paging) {
+        this.paging = paging;
     }
 }
