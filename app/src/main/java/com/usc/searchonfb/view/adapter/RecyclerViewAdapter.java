@@ -48,6 +48,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void setData(List<SearchData> data) {
+        if(data.size()==0 && isFavorite && onItemClickListener!=null){
+            onItemClickListener.onItemClick(0);
+        }
         this.searchDataList = data;
     }
 

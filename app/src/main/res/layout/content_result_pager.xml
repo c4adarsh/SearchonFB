@@ -34,5 +34,15 @@
         android:layout_height="match_parent"
         android:layout_above="@id/btns"/>
 
+    <TextView
+        android:id="@+id/no_data_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btns"
+        android:text="No data Found"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textSize="24sp"/>
+
 </RelativeLayout>
 

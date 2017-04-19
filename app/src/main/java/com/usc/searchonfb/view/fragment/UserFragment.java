@@ -1,5 +1,6 @@
 package com.usc.searchonfb.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.usc.searchonfb.R;
@@ -20,7 +22,9 @@ import com.usc.searchonfb.rest.model.SearchModel.Paging;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
 import com.usc.searchonfb.utils.FavoriteSharedPreference;
 import com.usc.searchonfb.utils.NextPrevUtil;
+import com.usc.searchonfb.view.activity.MainActivity;
 import com.usc.searchonfb.view.activity.ResultsActivity;
+import com.usc.searchonfb.view.adapter.OnItemClickListener;
 import com.usc.searchonfb.view.adapter.RecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -58,6 +62,8 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
     Button mNextButton;
 
     Button mPreviousButton;
+
+    TextView mNoDataView;
 
     String nextUrl = null;
 
@@ -108,6 +114,8 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
         //newly added
         mNextButton = (Button) v.findViewById(R.id.next);
         mPreviousButton = (Button) v.findViewById(R.id.previous);
+        //no data view
+        mNoDataView = (TextView)v.findViewById(R.id.no_data_view);
     }
 
     @Override
@@ -124,6 +132,7 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
         }
 
         if (callFromFavorites) {
+            onClickListener();
             addResults(FavoriteSharedPreference.getFavouriteList(getActivity(), CONST_USER), null);
         }
 
@@ -131,6 +140,8 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
 
     @Override
     public void addResults(List<SearchData> searchData, Paging mPaging) {
+        mNoDataView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
         if (searchData != null) {
             Log.i(UserFragment.class.getSimpleName(), searchData.size() + "");
             adapter.setData(searchData);
@@ -140,22 +151,37 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
             this.mPaging = mPaging;
         }
 
-        //newly added code
-        handleNextPrevVisibility(mPaging);
-
+        //TEMP FIX
+        if(callFromFavorites){
+            if(searchData!=null && searchData.size()==0){
+                showEmptyResultsView(mPaging);
+            }
+        }else{
+            //newly added code
+            handleNextPrevVisibility(mPaging);
+        }
     }
 
     //newly added code
     private void handleNextPrevVisibility(Paging mPaging) {
         nextUrl = NextPrevUtil.getNextOffset(mPaging);
-        previousUrl = NextPrevUtil.getPreviosOffset(mPaging);
+        String tempPreviousUrl = NextPrevUtil.getPreviosOffset(mPaging);
 
         if (nextUrl != null) {
             mNextButton.setEnabled(true);
         }
 
-        if (previousUrl != null) {
-            mPreviousButton.setEnabled(true);
+        if(tempPreviousUrl==null && nextUrl==null){
+            if(previousUrl!=null){
+                mPreviousButton.setEnabled(true);
+            }
+        }else{
+            previousUrl = tempPreviousUrl;
+            if(previousUrl==null){
+                mPreviousButton.setEnabled(false);
+            }else{
+                mPreviousButton.setEnabled(true);
+            }
         }
     }
 
@@ -212,7 +238,10 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
 
     @Override
     public void showContentError() {
-
+       Toast.makeText(getActivity(),"Error in getting data",Toast.LENGTH_SHORT).show();
+        if(previousUrl!=null){
+            mPreviousButton.setEnabled(true);
+        }
     }
 
     @Override
@@ -227,16 +256,25 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
 
     @Override
     public void showEmptyResultsView(Paging mPaging) {
-        //newly added
-
-        //tell there is no data to show here
-        //this is facebooks error
-        //Page empty should pop up here
+        mNoDataView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
         handleNextPrevVisibility(mPaging);
     }
 
     @Override
     public void hideEmptyResultsView() {
 
+    }
+
+    private void onClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int noItems) {
+                if(noItems<=0){
+                    mNoDataView.setVisibility(View.VISIBLE);
+                    mRecyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 }

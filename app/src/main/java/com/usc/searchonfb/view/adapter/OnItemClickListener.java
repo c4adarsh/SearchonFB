@@ -8,5 +8,5 @@ import com.usc.searchonfb.rest.model.SearchModel.SearchData;
  */
 
 public interface OnItemClickListener {
-    void onItemClick(SearchData item);
+    void onItemClick(int itemCount);
 }

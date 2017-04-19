@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.usc.searchonfb.R;
 import com.usc.searchonfb.presenter.GroupFragmentPresenter;
@@ -20,6 +22,7 @@ import com.usc.searchonfb.rest.model.SearchModel.SearchData;
 import com.usc.searchonfb.utils.FavoriteSharedPreference;
 import com.usc.searchonfb.utils.NextPrevUtil;
 import com.usc.searchonfb.view.activity.ResultsActivity;
+import com.usc.searchonfb.view.adapter.OnItemClickListener;
 import com.usc.searchonfb.view.adapter.RecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -56,6 +59,8 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
     Paging mPaging;
 
     //newly added
+    TextView mNoDataView;
+
     Button mNextButton;
 
     Button mPreviousButton;
@@ -111,6 +116,9 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
         //newly added
         mNextButton = (Button) v.findViewById(R.id.next);
         mPreviousButton = (Button) v.findViewById(R.id.previous);
+
+        //no data view
+        mNoDataView = (TextView)v.findViewById(R.id.no_data_view);
     }
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {
@@ -125,6 +133,7 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
         }
 
         if(callFromFavorites){
+            onClickListener();
             addResults(FavoriteSharedPreference.getFavouriteList(getActivity(),CONST_GROUP),null);
         }
 
@@ -132,6 +141,8 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
 
     @Override
     public void addResults(List<SearchData> searchData,Paging mPaging) {
+        mNoDataView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
         if(searchData!=null){
             Log.i(UserFragment.class.getSimpleName(),searchData.size() + "");
             adapter.setData(searchData);
@@ -142,21 +153,37 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
             this.mPaging = mPaging;
         }
 
-        //newly added code
-        handleNextPrevVisibility(mPaging);
+        //TEMP FIX
+        if(callFromFavorites){
+            if(searchData!=null && searchData.size()==0){
+                showEmptyResultsView(mPaging);
+            }
+        }else{
+            //newly added code
+            handleNextPrevVisibility(mPaging);
+        }
     }
 
     //newly added code
     private void handleNextPrevVisibility(Paging mPaging) {
         nextUrl = NextPrevUtil.getNextOffset(mPaging);
-        previousUrl = NextPrevUtil.getPreviosOffset(mPaging);
+        String tempPreviousUrl = NextPrevUtil.getPreviosOffset(mPaging);
 
         if (nextUrl != null) {
             mNextButton.setEnabled(true);
         }
 
-        if (previousUrl != null) {
-            mPreviousButton.setEnabled(true);
+        if(tempPreviousUrl==null && nextUrl==null){
+            if(previousUrl!=null){
+                mPreviousButton.setEnabled(true);
+            }
+        }else{
+            previousUrl = tempPreviousUrl;
+            if(previousUrl==null){
+                mPreviousButton.setEnabled(false);
+            }else{
+                mPreviousButton.setEnabled(true);
+            }
         }
     }
 
@@ -213,7 +240,10 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
 
     @Override
     public void showContentError() {
-
+        Toast.makeText(getActivity(),"Error in getting data",Toast.LENGTH_SHORT).show();
+        if(previousUrl!=null){
+            mPreviousButton.setEnabled(true);
+        }
     }
 
     @Override
@@ -228,17 +258,26 @@ public class GroupFragment extends Fragment implements MainPresenterContract.Vie
 
     @Override
     public void showEmptyResultsView(Paging mPaging) {
-        //newly added
-
-        //tell there is no data to show here
-        //this is facebooks error
-        //Page empty should pop up here
+        mNoDataView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
         handleNextPrevVisibility(mPaging);
     }
 
     @Override
     public void hideEmptyResultsView() {
 
+    }
+
+    private void onClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int noItems) {
+                if(noItems<=0){
+                    mNoDataView.setVisibility(View.VISIBLE);
+                    mRecyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 }
 
