@@ -34,6 +34,9 @@ import javax.inject.Inject;
 import static com.usc.searchonfb.utils.Constants.CALL_FROM_FAVORITES;
 import static com.usc.searchonfb.utils.Constants.CONST_PLACE;
 import static com.usc.searchonfb.utils.Constants.CONST_USER;
+import static com.usc.searchonfb.utils.Constants.CURRENT_URL;
+import static com.usc.searchonfb.utils.Constants.NEXT_URL;
+import static com.usc.searchonfb.utils.Constants.PREV_URL;
 import static com.usc.searchonfb.utils.Constants.SEARCH_STRING;
 
 /**
@@ -68,6 +71,8 @@ public class PlaceFragment extends Fragment implements MainPresenterContract.Vie
     String nextUrl = null;
 
     String previousUrl = null;
+
+    String currentUrl = null;
 
     public PlaceFragment() {
     }
@@ -127,9 +132,19 @@ public class PlaceFragment extends Fragment implements MainPresenterContract.Vie
             ((ResultsActivity)getActivity()).getResultFragmentComponent().inject(this);
         }
 
-        if(mSearchString!=null && mPresenter!=null ){
+        if (mSearchString != null && mPresenter != null) {
             mPresenter.attach(this);
-            mPresenter.load(mSearchString, 0, null);
+
+            if (savedInstanceState != null && savedInstanceState.getString(CURRENT_URL) != null) {
+                currentUrl = savedInstanceState.getString(CURRENT_URL);
+                mPresenter.load(mSearchString, 0, currentUrl);
+            } else {
+                if(currentUrl!=null){
+                    mPresenter.load(mSearchString, 0, currentUrl);
+                }else{
+                    mPresenter.load(mSearchString, 0, null);
+                }
+            }
         }
 
         if(callFromFavorites){
@@ -139,7 +154,26 @@ public class PlaceFragment extends Fragment implements MainPresenterContract.Vie
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mSearchString != null) {
+            outState.putString(SEARCH_STRING, mSearchString);
+        }
 
+        if (nextUrl != null) {
+            outState.putString(NEXT_URL, nextUrl);
+        }
+
+        if (previousUrl != null) {
+            outState.putString(PREV_URL, previousUrl);
+        }
+
+        if (currentUrl != null) {
+            outState.putString(CURRENT_URL, currentUrl);
+        }
+
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void addResults(List<SearchData> searchData,Paging mPaging) {
@@ -197,6 +231,7 @@ public class PlaceFragment extends Fragment implements MainPresenterContract.Vie
                 mNextButton.setEnabled(false);
                 mPreviousButton.setEnabled(false);
                 if (mPresenter != null && nextUrl != null && mSearchString != null) {
+                    currentUrl = nextUrl;
                     mPresenter.load(mSearchString, 0, nextUrl);
                 }
 
@@ -209,6 +244,7 @@ public class PlaceFragment extends Fragment implements MainPresenterContract.Vie
                 mNextButton.setEnabled(false);
                 mPreviousButton.setEnabled(false);
                 if (mPresenter != null && previousUrl != null && mSearchString != null) {
+                    currentUrl = previousUrl;
                     mPresenter.load(mSearchString, 0, previousUrl);
                 }
             }

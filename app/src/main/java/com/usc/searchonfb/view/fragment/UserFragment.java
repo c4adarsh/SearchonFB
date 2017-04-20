@@ -34,6 +34,9 @@ import javax.inject.Inject;
 
 import static com.usc.searchonfb.utils.Constants.CALL_FROM_FAVORITES;
 import static com.usc.searchonfb.utils.Constants.CONST_USER;
+import static com.usc.searchonfb.utils.Constants.CURRENT_URL;
+import static com.usc.searchonfb.utils.Constants.NEXT_URL;
+import static com.usc.searchonfb.utils.Constants.PREV_URL;
 import static com.usc.searchonfb.utils.Constants.SEARCH_STRING;
 
 /**
@@ -68,6 +71,8 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
     String nextUrl = null;
 
     String previousUrl = null;
+
+    String currentUrl = null;
 
     public UserFragment() {
     }
@@ -115,7 +120,7 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
         mNextButton = (Button) v.findViewById(R.id.next);
         mPreviousButton = (Button) v.findViewById(R.id.previous);
         //no data view
-        mNoDataView = (TextView)v.findViewById(R.id.no_data_view);
+        mNoDataView = (TextView) v.findViewById(R.id.no_data_view);
     }
 
     @Override
@@ -128,7 +133,17 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
 
         if (mSearchString != null && mPresenter != null) {
             mPresenter.attach(this);
-            mPresenter.load(mSearchString, 0, null);
+
+            if (savedInstanceState != null && savedInstanceState.getString(CURRENT_URL) != null) {
+                currentUrl = savedInstanceState.getString(CURRENT_URL);
+                mPresenter.load(mSearchString, 0, currentUrl);
+            } else {
+                if(currentUrl!=null){
+                    mPresenter.load(mSearchString, 0, currentUrl);
+                }else{
+                    mPresenter.load(mSearchString, 0, null);
+                }
+            }
         }
 
         if (callFromFavorites) {
@@ -136,6 +151,27 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
             addResults(FavoriteSharedPreference.getFavouriteList(getActivity(), CONST_USER), null);
         }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mSearchString != null) {
+            outState.putString(SEARCH_STRING, mSearchString);
+        }
+
+        if (nextUrl != null) {
+            outState.putString(NEXT_URL, nextUrl);
+        }
+
+        if (previousUrl != null) {
+            outState.putString(PREV_URL, previousUrl);
+        }
+
+        if (currentUrl != null) {
+            outState.putString(CURRENT_URL, currentUrl);
+        }
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -152,11 +188,11 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
         }
 
         //TEMP FIX
-        if(callFromFavorites){
-            if(searchData!=null && searchData.size()==0){
+        if (callFromFavorites) {
+            if (searchData != null && searchData.size() == 0) {
                 showEmptyResultsView(mPaging);
             }
-        }else{
+        } else {
             //newly added code
             handleNextPrevVisibility(mPaging);
         }
@@ -171,15 +207,15 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
             mNextButton.setEnabled(true);
         }
 
-        if(tempPreviousUrl==null && nextUrl==null){
-            if(previousUrl!=null){
+        if (tempPreviousUrl == null && nextUrl == null) {
+            if (previousUrl != null) {
                 mPreviousButton.setEnabled(true);
             }
-        }else{
+        } else {
             previousUrl = tempPreviousUrl;
-            if(previousUrl==null){
+            if (previousUrl == null) {
                 mPreviousButton.setEnabled(false);
-            }else{
+            } else {
                 mPreviousButton.setEnabled(true);
             }
         }
@@ -193,6 +229,7 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
                 mNextButton.setEnabled(false);
                 mPreviousButton.setEnabled(false);
                 if (mPresenter != null && nextUrl != null && mSearchString != null) {
+                    currentUrl = nextUrl;
                     mPresenter.load(mSearchString, 0, nextUrl);
                 }
 
@@ -205,6 +242,7 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
                 mNextButton.setEnabled(false);
                 mPreviousButton.setEnabled(false);
                 if (mPresenter != null && previousUrl != null && mSearchString != null) {
+                    currentUrl = previousUrl;
                     mPresenter.load(mSearchString, 0, previousUrl);
                 }
             }
@@ -238,8 +276,8 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
 
     @Override
     public void showContentError() {
-       Toast.makeText(getActivity(),"Error in getting data",Toast.LENGTH_SHORT).show();
-        if(previousUrl!=null){
+        Toast.makeText(getActivity(), "Error in getting data", Toast.LENGTH_SHORT).show();
+        if (previousUrl != null) {
             mPreviousButton.setEnabled(true);
         }
     }
@@ -270,7 +308,7 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int noItems) {
-                if(noItems<=0){
+                if (noItems <= 0) {
                     mNoDataView.setVisibility(View.VISIBLE);
                     mRecyclerView.setVisibility(View.GONE);
                 }
