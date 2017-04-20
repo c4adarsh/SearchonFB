@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.usc.searchonfb.presenter.contract.MainPresenterContract;
 import com.usc.searchonfb.rest.model.SearchModel.SearchDataList;
+import com.usc.searchonfb.rest.networkInterface.GetLocationSearchService;
 import com.usc.searchonfb.rest.networkInterface.GetSearchService;
 
 import javax.inject.Inject;
@@ -14,10 +15,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
-
-/**
- * Created by adarsh on 4/4/2017.
- */
 
 public class PlaceDataModel implements MainPresenterContract.Model {
 
@@ -44,7 +41,14 @@ public class PlaceDataModel implements MainPresenterContract.Model {
         //Log.i(PlaceDataModel.class.getSimpleName(),"Reached here");
         Observable<SearchDataList> observable;
         if(url==null){
-            observable = mRetrofit.create(GetSearchService.class).getDataList(SearchQuery,"Place",offset);
+            double lat = FacebookApplicationModel.getFacebookApplicationModel().getLat();
+            double lng = FacebookApplicationModel.getFacebookApplicationModel().getLon();
+            if(lat!=0 && lng!=0){
+                observable = mRetrofit.create(GetLocationSearchService.class).getDataList(SearchQuery,"Place",lat,lng,offset);
+            }else{
+                observable = mRetrofit.create(GetSearchService.class).getDataList(SearchQuery,"Place",offset);
+            }
+
         }else{
             observable = mRetrofit.create(GetSearchService.class).getDataListUrl(url);
         }

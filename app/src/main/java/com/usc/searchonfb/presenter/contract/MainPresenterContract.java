@@ -27,6 +27,7 @@ public class MainPresenterContract {
     }
     public interface Presenter extends BasePresenterInterface<View> {
         void load(String query, int offset, String url);
+        void load(String query, int offset, String url, double lat, double lon);
         void loadMore();
         void queryChanged(String query);
         void listItemClicked(SearchData searchData);

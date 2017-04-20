@@ -27,6 +27,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.usc.searchonfb.R;
 import com.usc.searchonfb.databinding.ActivityMainBinding;
+import com.usc.searchonfb.model.FacebookApplicationModel;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -145,16 +146,16 @@ public class MainActivity extends AppCompatActivity
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(MainActivity.class.getSimpleName(), "Connected to Google Play Services!");
 
-        boolean isPermissionGrantrue = false;
+        boolean isPermissionGranted = false;
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                isPermissionGrantrue = true;
+                isPermissionGranted = true;
             }
         } else {
-            isPermissionGrantrue = true;
+            isPermissionGranted = true;
         }
-        if (isPermissionGrantrue) {
+        if (isPermissionGranted) {
             Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
             if (lastLocation != null) {
@@ -162,6 +163,8 @@ public class MainActivity extends AppCompatActivity
                 lng = lastLocation.getLongitude();
                 isLocationFound = true;
                 Log.i(MainActivity.class.getSimpleName(), "lat" + lat + " lng" + lng);
+                FacebookApplicationModel.getFacebookApplicationModel().setLat(lat);
+                FacebookApplicationModel.getFacebookApplicationModel().setLon(lng);
             }
 
         }

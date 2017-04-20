@@ -14,7 +14,7 @@ import retrofit2.http.Query;
 public interface GetLocationSearchService {
 
     @GET("search_aws.php?")
-    Observable<SearchDataList> getDataList(@Query("search_query") String query, @Query("type") String type, @Query("lat") String lat, @Query("lng") String lng, @Query("offset1") int offset);
+    Observable<SearchDataList> getDataList(@Query("search_query") String query, @Query("type") String type, @Query("lat") Double lat, @Query("lng") Double lng, @Query("offset1") int offset);
 
     @GET("search_aws.php?")
     Observable<SearchDataList> getDataList(@Query("urlSearch") String urlSearch);

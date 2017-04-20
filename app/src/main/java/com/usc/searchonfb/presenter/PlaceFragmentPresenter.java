@@ -41,9 +41,18 @@ public class PlaceFragmentPresenter implements MainPresenterContract.Presenter, 
 
 
     @Override
-    public void load(String searchQuery, int offset, String url) {
+    public void load(String searchQuery, int offset, String url, double lat, double lon) {
         if(mMainView!=null){
             model.loadUserDetails(searchQuery, offset, url);
+        }else{
+            Log.i("Adarsh","mMainView is null");
+        }
+    }
+
+    @Override
+    public void load(String searchQuery, int offset, String url) {
+        if(mMainView!=null){
+            model.loadUserDetails(searchQuery, offset,url);
         }else{
             Log.i("Adarsh","mMainView is null");
         }

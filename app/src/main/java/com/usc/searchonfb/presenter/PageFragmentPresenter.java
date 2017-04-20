@@ -50,6 +50,11 @@ public class PageFragmentPresenter implements MainPresenterContract.Presenter, M
     }
 
     @Override
+    public void load(String query, int offset, String url, double lat, double lon) {
+
+    }
+
+    @Override
     public void loadMore() {
         if(mMainView!=null){
 
