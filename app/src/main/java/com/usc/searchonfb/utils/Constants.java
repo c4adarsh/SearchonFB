@@ -23,4 +23,8 @@ public class Constants {
     public static final String CONST_GROUP = "Group";
     public static final String CALL_FROM_FAVORITES = "call from favorites";
 
+    public static final String DETAILS_DATA = "details_data";
+    public static final String LAST_EXPANDED_POSITION = "last_expanded_position";
+    public static final String TYPE = "type";
+
 }

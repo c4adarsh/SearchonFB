@@ -1,10 +1,13 @@
 package com.usc.searchonfb.rest.model.SearchModel;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by adarsh on 4/19/2017.
  */
 
-public class Paging {
+public class Paging implements Parcelable {
 
     String next;
 
@@ -30,4 +33,33 @@ public class Paging {
     public void setPrevious(String previous) {
         this.previous = previous;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.next);
+        dest.writeString(this.previous);
+    }
+
+    protected Paging(Parcel in) {
+        this.next = in.readString();
+        this.previous = in.readString();
+    }
+
+    public static final Parcelable.Creator<Paging> CREATOR = new Parcelable.Creator<Paging>() {
+        @Override
+        public Paging createFromParcel(Parcel source) {
+            return new Paging(source);
+        }
+
+        @Override
+        public Paging[] newArray(int size) {
+            return new Paging[size];
+        }
+    };
 }

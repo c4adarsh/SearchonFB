@@ -21,6 +21,9 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 import static com.usc.searchonfb.utils.Constants.CONST_USER;
+import static com.usc.searchonfb.utils.Constants.DETAILS_DATA;
+import static com.usc.searchonfb.utils.Constants.LAST_EXPANDED_POSITION;
+import static com.usc.searchonfb.utils.Constants.TYPE;
 
 /**
  * Created by adarsh on 4/15/2017.
@@ -65,6 +68,13 @@ public class PostsFragment extends Fragment{
         mErrorText = (TextView)v.findViewById(R.id.error_message);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(DETAILS_DATA,mDetailData);
+        outState.putString(TYPE,type);
+        super.onSaveInstanceState(outState);
+    }
+
     public void insertData(DetailsData pDetailData, String type) {
         dataInserted = true;
         mDetailData = pDetailData;
@@ -104,6 +114,16 @@ public class PostsFragment extends Fragment{
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         isActivityCreated = true;
+        if(savedInstanceState!=null){
+            if(savedInstanceState.getParcelable(DETAILS_DATA)!=null){
+                mDetailData = savedInstanceState.getParcelable(DETAILS_DATA);
+                dataInserted = true;
+            }
+
+            if(savedInstanceState.getParcelable(TYPE)!=null){
+                type = savedInstanceState.getParcelable(TYPE);
+            }
+        }
         if(dataInserted){
             updateUI();
         }

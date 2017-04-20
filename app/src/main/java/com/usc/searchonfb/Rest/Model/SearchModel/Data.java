@@ -3,10 +3,6 @@ package com.usc.searchonfb.rest.model.SearchModel;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by adarsh on 4/15/2017.
- */
-
 public class Data implements Parcelable {
 
     String url;

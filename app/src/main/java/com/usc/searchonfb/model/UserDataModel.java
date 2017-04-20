@@ -41,7 +41,7 @@ public class UserDataModel implements MainPresenterContract.Model {
     }
 
     public void loadUserDetails(String SearchQuery, int offset, String url){
-        Log.i(UserDataModel.class.getSimpleName(),"Reached here");
+        //Log.i(UserDataModel.class.getSimpleName(),"Reached here");
 
         Observable<SearchDataList> observable;
         if(url==null){

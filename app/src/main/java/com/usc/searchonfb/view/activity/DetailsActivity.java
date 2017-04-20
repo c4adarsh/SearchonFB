@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +37,6 @@ import com.usc.searchonfb.rest.model.DetailModel.DetailsData;
 import com.usc.searchonfb.rest.model.SearchModel.Picture;
 import com.usc.searchonfb.rest.model.SearchModel.SearchData;
 import com.usc.searchonfb.utils.FavoriteSharedPreference;
-import com.usc.searchonfb.view.adapter.RecyclerViewPostAdapter;
 import com.usc.searchonfb.view.fragment.AlbumFragment;
 import com.usc.searchonfb.view.fragment.PostsFragment;
 
@@ -77,6 +75,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
     String mShareUrl = "http://adarsh.us-west-2.elasticbeanstalk.com/index/index.html";
 
     String mContentDescription = "FB SEARCH FROM USC CSCI571";
+
+    DetailsData mDetailsData;
 
     @Inject
     DetailActivityPresenter mainPresenter;
@@ -280,6 +280,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
 
     @Override
     public void addResults(DetailsData mDetailsData) {
+
+        this.mDetailsData = mDetailsData;
 
         if (mAlbumFragment != null) {
             mAlbumFragment.insertData(mDetailsData);

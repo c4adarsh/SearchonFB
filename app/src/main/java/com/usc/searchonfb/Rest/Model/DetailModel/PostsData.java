@@ -1,10 +1,13 @@
 package com.usc.searchonfb.rest.model.DetailModel;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by adarsh on 4/15/2017.
  */
 
-public class PostsData {
+public class PostsData implements Parcelable {
 
     String message;
 
@@ -29,4 +32,35 @@ public class PostsData {
     public String getStory() {
         return story;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.message);
+        dest.writeString(this.created_time);
+        dest.writeString(this.story);
+    }
+
+    protected PostsData(Parcel in) {
+        this.message = in.readString();
+        this.created_time = in.readString();
+        this.story = in.readString();
+    }
+
+    public static final Parcelable.Creator<PostsData> CREATOR = new Parcelable.Creator<PostsData>() {
+        @Override
+        public PostsData createFromParcel(Parcel source) {
+            return new PostsData(source);
+        }
+
+        @Override
+        public PostsData[] newArray(int size) {
+            return new PostsData[size];
+        }
+    };
 }

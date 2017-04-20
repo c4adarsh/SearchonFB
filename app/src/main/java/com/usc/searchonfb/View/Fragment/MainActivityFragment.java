@@ -38,7 +38,7 @@ public class MainActivityFragment extends Fragment {
         binding.search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(binding.autoCompleteTextView.getText().toString().length()!=0){
+                if(binding.autoCompleteTextView.getText().toString().trim().length()!=0){
                     Intent mIntent = new Intent(getActivity(), ResultsActivity.class);
                     mIntent.putExtra(SEARCH_STRING,binding.autoCompleteTextView.getText().toString());
                     startActivity(mIntent);
