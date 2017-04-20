@@ -138,7 +138,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsPresent
     }
 
     private void facebookSDKInitialize() {
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        /*FacebookSdk.sdkInitialize(getApplicationContext());*/
         callbackManager = CallbackManager.Factory.create();
     }
 
