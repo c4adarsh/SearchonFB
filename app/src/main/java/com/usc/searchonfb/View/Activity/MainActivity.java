@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
-        //Request Permission and initialize google client
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermission();
         }
@@ -144,8 +143,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.i(MainActivity.class.getSimpleName(), "Connected to Google Play Services!");
-
         boolean isPermissionGranted = false;
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -162,7 +159,6 @@ public class MainActivity extends AppCompatActivity
                 lat = lastLocation.getLatitude();
                 lng = lastLocation.getLongitude();
                 isLocationFound = true;
-                Log.i(MainActivity.class.getSimpleName(), "lat" + lat + " lng" + lng);
                 FacebookApplicationModel.getFacebookApplicationModel().setLat(lat);
                 FacebookApplicationModel.getFacebookApplicationModel().setLon(lng);
             }

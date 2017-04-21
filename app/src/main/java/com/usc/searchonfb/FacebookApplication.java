@@ -23,7 +23,6 @@ public class FacebookApplication  extends Application {
                 .netModule(new NetModule("http://adarsh1.us-west-2.elasticbeanstalk.com/"))
                 .build();
         FacebookSdk.sdkInitialize(getApplicationContext());
-        //AppEventsLogger.activateApp(this);
     }
 
     public NetComponent getNetComponent() {
