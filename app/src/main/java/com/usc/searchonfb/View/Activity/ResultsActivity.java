@@ -119,12 +119,14 @@ public class ResultsActivity extends AppCompatActivity {
 
     }
 
+    //In the result activity we have 5 fragments one for each tab
     public void setupViewPager(ViewPager mViewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         Bundle args = new Bundle();
         args.putString(SEARCH_STRING, mSearchString);
 
+        //This is the usertab
         UserFragment mUserFragment = new UserFragment();
         mUserFragment.setArguments(args);
         adapter.addFrag(mUserFragment, "Users");

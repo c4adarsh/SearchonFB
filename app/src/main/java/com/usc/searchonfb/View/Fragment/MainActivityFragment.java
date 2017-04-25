@@ -15,6 +15,7 @@ import com.usc.searchonfb.view.activity.ResultsActivity;
 
 import static com.usc.searchonfb.utils.Constants.SEARCH_STRING;
 
+//This is the main activity fragment which comes on the click of Home
 public class MainActivityFragment extends Fragment {
 
     ContentMainBinding binding;
@@ -39,6 +40,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(binding.autoCompleteTextView.getText().toString().trim().length()!=0){
+                    //Start the result activity, which contains user, pages, places, groups....
                     Intent mIntent = new Intent(getActivity(), ResultsActivity.class);
                     mIntent.putExtra(SEARCH_STRING,binding.autoCompleteTextView.getText().toString());
                     startActivity(mIntent);

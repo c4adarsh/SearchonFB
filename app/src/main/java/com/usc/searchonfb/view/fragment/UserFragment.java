@@ -81,6 +81,7 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            //This is the user searched keyword
             mSearchString = getArguments().getString(SEARCH_STRING);
             callFromFavorites = getArguments().getBoolean(CALL_FROM_FAVORITES, callFromFavorites);
         }
@@ -127,6 +128,8 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        //This method of fragment is called when the activity is completely initialized.
+
         if (mSearchString != null) {
             ((ResultsActivity) getActivity()).getResultFragmentComponent().inject(this);
         }
@@ -139,6 +142,7 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
                 mPresenter.load(mSearchString, 0, currentUrl);
             } else {
                 if(currentUrl!=null){
+                    //I make a network call here and get the results
                     mPresenter.load(mSearchString, 0, currentUrl);
                 }else{
                     mPresenter.load(mSearchString, 0, null);
@@ -176,11 +180,14 @@ public class UserFragment extends Fragment implements MainPresenterContract.View
 
     @Override
     public void addResults(List<SearchData> searchData, Paging mPaging) {
+        //This is the method which is called when the data comes back
         mNoDataView.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
         if (searchData != null) {
             Log.i(UserFragment.class.getSimpleName(), searchData.size() + "");
+            //This is the adapter that you create everytime, i just call notify data set changed.....
             adapter.setData(searchData);
+            //create adapter only once
             adapter.notifyDataSetChanged();
         }
         if (mPaging != null) {

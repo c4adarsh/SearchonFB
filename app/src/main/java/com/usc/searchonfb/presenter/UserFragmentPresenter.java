@@ -85,6 +85,7 @@ public class UserFragmentPresenter implements MainPresenterContract.Presenter, M
 
     @Override
     public void onResultLoad(List<SearchData> mSeachList, Paging mPaging) {
+        //call back comes here
         if(mMainView!=null){
             //Log.i("Adarsh","I am here1 dude");
             if(mSeachList.size()==0){
